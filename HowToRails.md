@@ -1,4 +1,4 @@
-# README
+# HOW TO USE RAILS
 
 # SE Rails starter
 
