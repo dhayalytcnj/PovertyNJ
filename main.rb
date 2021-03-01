@@ -43,6 +43,7 @@ $DATA_SET = Array.new #2d array with rows and columns... or could be a hashmappe
     }'
 })
 
+
 def scraper(#filename = File.new() OR no attrs )
     # scrape data from either downloaded file or site. This can be called within webcrawler method
 
@@ -61,9 +62,19 @@ end
 
 
 def chart1(DATA_SET)
+    # Chart for county selected
     # modify data in chart global variable
 end
 
+
 def chart2(DATA_SET) 
-    # create another chart
+    # create another chart if needed
+end
+
+
+def map
+    # create interactive map of NJ.
+    # https://www.fusioncharts.com/dev/getting-started/ruby-on-rails/your-first-map-using-ruby-on-rails
+    # The map will be using a still image of an NJ map with their counties bordered. You would click a county to get to their data
+
 end
