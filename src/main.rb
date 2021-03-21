@@ -5,6 +5,7 @@
 # Framework/Skeleton/Prototype:
 
 require 'spreadsheet'
+require 'csv'   # 6 csv files within 2014_19_census_data folder. Data with overlays 
 require 'fusioncharts' # https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
 
 $DATA_SET = Array.new #2d array with rows and columns... or could be a hashmapped 2d array
@@ -48,16 +49,6 @@ def scraper(#filename = File.new() OR no attrs )
     # scrape data from either downloaded file or site. This can be called within webcrawler method
 
     #loop to clean and push into global array DATA_SET
-end
-
-
-def webcrawler
-    # webcrawl a site for data, to either download or scrape (depending on whats easier to access)
-=begin
-    potential sources:
-    https://data.census.gov/cedsci/table?q=NJ%20poverty&tid=ACSST5Y2019.S1701&hidePreview=false
-    
-=end
 end
 
 
