@@ -45,13 +45,14 @@ $DATA_SET = Array.new #2d array with rows and columns... or could be a hashmappe
         ]
     }'
 })
-=end
 
 
-def scraper()#filename = File.new() OR no attrs )
+
+def scraper(filename)
     # scrape data from either downloaded file or site.
-
     #loop to clean and push into global array DATA_SET
+
+    #datafile = File.read()
 end
 
 
@@ -72,25 +73,24 @@ def map
     # The map will be using a still image of an NJ map with their counties bordered. You would click a county to get to their data
 
 end
+=end
 
-data2014 = CSV.read('2014_2019_census_data\ACSST5Y2014.S1701_data_with_overlays_2021-03-20T130441.csv')
-data2015 = CSV.read('2014_2019_census_data\ACSST5Y2015.S1701_data_with_overlays_2021-03-20T130441.csv')
-data2016 = CSV.read('2014_2019_census_data\ACSST5Y2016.S1701_data_with_overlays_2021-03-20T130441.csv')
-data2017 = CSV.read('2014_2019_census_data\ACSST5Y2017.S1701_data_with_overlays_2021-03-20T130441.csv')
-data2018 = CSV.read('2014_2019_census_data\ACSST5Y2018.S1701_data_with_overlays_2021-03-20T130441.csv')
-data2019 = CSV.read('2014_2019_census_data\ACSST5Y2019.S1701_data_with_overlays_2021-03-20T130441.csv')
+#data2014 = CSV.read('2014_2019_census_data\ACSST5Y2014.S1701-2021-03-24T223501.csv', :quote_char => "|")
+data2015 = CSV.read('2014_2019_census_data\ACSST5Y2015.S1701-2021-03-24T223430.csv', :quote_char => "|")
+data2016 = CSV.read('2014_2019_census_data\ACSST5Y2016.S1701-2021-03-24T223412.csv', :quote_char => "|")
+data2017 = CSV.read('2014_2019_census_data\ACSST5Y2017.S1701-2021-03-24T223356.csv', :quote_char => "|") 
+data2018 = CSV.read('2014_2019_census_data\ACSST5Y2018.S1701-2021-03-24T223338.csv', :quote_char => "|")
+data2019 = CSV.read('2014_2019_census_data\ACSST5Y2019.S1701-2021-03-24T223243.csv', :quote_char => "|")
 
-puts data2014[1][1]  #county name
-puts data2014[1][18] #white
-puts data2014[1][20] #black
-puts data2014[1][22] #native american
-puts data2014[1][24] #asian
-puts data2014[1][26] #hawaiian or pacific islander
-puts data2014[1][28] #other
-puts data2014[1][32] #hispanic
+data2014 = File.read('2014_2019_census_data\ACSST5Y2014.S1701-2021-03-24T223501.csv').gsub(/\"/,'""')
+CSV.parse(data2014, headers: true, header_converters: :symbol) do |row|
+  puts row
+end
 
+#puts data2014[12][2]
+=begin
 data2014.each do |row|  #start at row 2 of csv file, since the other 2 are titles
     if row < 2
         next
     else
-        
+=end
