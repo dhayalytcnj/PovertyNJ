@@ -82,7 +82,7 @@ data2017 = CSV.read('2014_2019_census_data\ACSST5Y2017.S1701-2021-03-24T223356.c
 data2018 = CSV.read('2014_2019_census_data\ACSST5Y2018.S1701-2021-03-24T223338.csv', :quote_char => "|")
 data2019 = CSV.read('2014_2019_census_data\ACSST5Y2019.S1701-2021-03-24T223243.csv', :quote_char => "|")
 
-data2014 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2014.S1701-2021-03-24T223501.csv')
+data2014 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2014.S1701-2021-03-24T223501.xls')
 sheet1 = data2014.worksheet('Sheet1')
 sheet1.each do |row|
     puts row
