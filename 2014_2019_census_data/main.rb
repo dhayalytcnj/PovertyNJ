@@ -101,105 +101,92 @@ sheet2019 = $data2019.worksheet('Sheet1')
 
 #2014
 x = 1
+countylist = []
 while x < 63 do
     countyHash = {
         :county =>      sheet2014[0,x][0..-30],
-        :whiteTotal14 =>  sheet2014[12,x],
-        :whitePov14 =>    sheet2014[12,x+1],
-        :whiteTotal15 =>  sheet2015[12,x],
-        :whitePov15 =>    sheet2015[12,x+1],
-        :whiteTotal16 =>  sheet2016[12,x],
-        :whitePov16 =>    sheet2016[12,x+1],
-        :whiteTotal17 =>  sheet2017[12,x],
-        :whitePov17 =>    sheet2017[12,x+1],
-        :whiteTotal18 =>  sheet2018[12,x],
-        :whitePov18 =>    sheet2018[12,x+1],
-        :whiteTotal19 =>  sheet2019[12,x],
-        :whitePov19 =>    sheet2019[12,x+1],
+        :whiteTotal14 =>  sheet2014[11,x],
+        :whitePov14 =>    sheet2014[11,x+1],
+        :whiteTotal15 =>  sheet2015[11,x],
+        :whitePov15 =>    sheet2015[11,x+1],
+        :whiteTotal16 =>  sheet2016[11,x],
+        :whitePov16 =>    sheet2016[11,x+1],
+        :whiteTotal17 =>  sheet2017[11,x],
+        :whitePov17 =>    sheet2017[11,x+1],
+        :whiteTotal18 =>  sheet2018[11,x],
+        :whitePov18 =>    sheet2018[11,x+1],
+        :whiteTotal19 =>  sheet2019[11,x],
+        :whitePov19 =>    sheet2019[11,x+1],
 
-        :hispTotal14 =>   sheet2014[11,x],
-        :hispPov14 =>     sheet2014[11,x+1],
-        :hispTotal15 =>   sheet2015[11,x],
-        :hispPov15 =>     sheet2015[11,x+1],
-        :hispTotal16 =>   sheet2016[11,x],
-        :hispPov16 =>     sheet2016[11,x+1],
-        :hispTotal17 =>   sheet2017[11,x],
-        :hispPov17 =>     sheet2017[11,x+1],
-        :hispTotal18 =>   sheet2018[11,x],
-        :hispPov18 =>     sheet2018[11,x+1],
-        :hispTotal19 =>   sheet2019[11,x],
-        :hispPov19 =>     sheet2019[11,x+1],
+        :hispTotal14 =>   sheet2014[10,x],
+        :hispPov14 =>     sheet2014[10,x+1],
+        :hispTotal15 =>   sheet2015[10,x],
+        :hispPov15 =>     sheet2015[10,x+1],
+        :hispTotal16 =>   sheet2016[10,x],
+        :hispPov16 =>     sheet2016[10,x+1],
+        :hispTotal17 =>   sheet2017[10,x],
+        :hispPov17 =>     sheet2017[10,x+1],
+        :hispTotal18 =>   sheet2018[10,x],
+        :hispPov18 =>     sheet2018[10,x+1],
+        :hispTotal19 =>   sheet2019[10,x],
+        :hispPov19 =>     sheet2019[10,x+1],
 
-        :blackTotal14 =>  sheet2014[5,x],
-        :blackPov14 =>    sheet2014[5,x+1],
-        :blackTotal15 =>  sheet2015[5,x],
-        :blackPov15 =>    sheet2015[5,x+1],
-        :blackTotal16 =>  sheet2016[5,x],
-        :blackPov16 =>    sheet2016[5,x+1],
-        :blackTotal17 =>  sheet2017[5,x],
-        :blackPov17 =>    sheet2017[5,x+1],
-        :blackTotal18 =>  sheet2018[5,x],
-        :blackPov18 =>    sheet2018[5,x+1],
-        :blackTotal19 =>  sheet2019[5,x],
-        :blackPov19 =>    sheet2019[5,x+1],
+        :blackTotal14 =>  sheet2014[4,x],
+        :blackPov14 =>    sheet2014[4,x+1],
+        :blackTotal15 =>  sheet2015[4,x],
+        :blackPov15 =>    sheet2015[4,x+1],
+        :blackTotal16 =>  sheet2016[4,x],
+        :blackPov16 =>    sheet2016[4,x+1],
+        :blackTotal17 =>  sheet2017[4,x],
+        :blackPov17 =>    sheet2017[4,x+1],
+        :blackTotal18 =>  sheet2018[4,x],
+        :blackPov18 =>    sheet2018[4,x+1],
+        :blackTotal19 =>  sheet2019[4,x],
+        :blackPov19 =>    sheet2019[4,x+1],
 
-        :asianTotal14 =>  sheet2014[7,x],
-        :asianPov14 =>    sheet2014[7,x+1],
-        :asianTotal15 =>  sheet2015[7,x],
-        :asianPov15 =>    sheet2015[7,x+1],
-        :asianTotal16 =>  sheet2016[7,x],
-        :asianPov16 =>    sheet2016[7,x+1],
-        :asianTotal17 =>  sheet2017[7,x],
-        :asianPov17 =>    sheet2017[7,x+1],
-        :asianTotal18 =>  sheet2018[7,x],
-        :asianPov18 =>    sheet2018[7,x+1],
-        :asianTotal19 =>  sheet2019[7,x],
-        :asianPov19 =>    sheet2019[7,x+1],
-
-
-        :nativeTotal14 => sheet2014[6,x],
-        :nativePov14 =>   sheet2014[6,x+1],
-        :nativeTotal15 => sheet2015[6,x],
-        :nativePov15 =>   sheet2015[6,x+1],
-        :nativeTotal16 => sheet2016[6,x],
-        :nativePov16 =>   sheet2016[6,x+1],
-        :nativeTotal17 => sheet2017[6,x],
-        :nativePov17 =>   sheet2017[6,x+1],
-        :nativeTotal18 => sheet2018[6,x],
-        :nativePov18 =>   sheet2018[6,x+1],
-        :nativeTotal19 => sheet2019[6,x],
-        :nativePov19 =>   sheet2019[6,x+1],
+        :asianTotal14 =>  sheet2014[6,x],
+        :asianPov14 =>    sheet2014[6,x+1],
+        :asianTotal15 =>  sheet2015[6,x],
+        :asianPov15 =>    sheet2015[6,x+1],
+        :asianTotal16 =>  sheet2016[6,x],
+        :asianPov16 =>    sheet2016[6,x+1],
+        :asianTotal17 =>  sheet2017[6,x],
+        :asianPov17 =>    sheet2017[6,x+1],
+        :asianTotal18 =>  sheet2018[6,x],
+        :asianPov18 =>    sheet2018[6,x+1],
+        :asianTotal19 =>  sheet2019[6,x],
+        :asianPov19 =>    sheet2019[6,x+1],
 
 
-        :otherTotal14 =>  sheet2014[9,x],
-        :otherPov14 =>    sheet2014[9,x+1]
+        :nativeTotal14 => sheet2014[5,x],
+        :nativePov14 =>   sheet2014[5,x+1],
+        :nativeTotal15 => sheet2015[5,x],
+        :nativePov15 =>   sheet2015[5,x+1],
+        :nativeTotal16 => sheet2016[5,x],
+        :nativePov16 =>   sheet2016[5,x+1],
+        :nativeTotal17 => sheet2017[5,x],
+        :nativePov17 =>   sheet2017[5,x+1],
+        :nativeTotal18 => sheet2018[5,x],
+        :nativePov18 =>   sheet2018[5,x+1],
+        :nativeTotal19 => sheet2019[5,x],
+        :nativePov19 =>   sheet2019[5,x+1],
+
+
+        :otherTotal14 =>  sheet2014[8,x],
+        :otherPov14 =>    sheet2014[8,x+1]
+        :otherTotal15 =>  sheet2015[8,x],
+        :otherPov15 =>    sheet2015[8,x+1]
+        :otherTotal16 =>  sheet2016[8,x],
+        :otherPov16 =>    sheet2016[8,x+1]
+        :otherTotal17 =>  sheet2017[8,x],
+        :otherPov17 =>    sheet2017[8,x+1]
+        :otherTotal18 =>  sheet2018[8,x],
+        :otherPov18 =>    sheet2018[8,x+1]
+        :otherTotal19 =>  sheet2019[8,x],
+        :otherPov19 =>    sheet2019[8,x+1]
     }
-    puts countyHash
+    countylist.push(countyHash)
     x = x + 3
 end
 
-
-=begin
-#county name
-puts sheet2014[0,1][0..-30]
-#total white, below poverty
-puts sheet2014[20,1] 
-puts sheet2014[20,2]
-#total hispanic, below poverty
-puts sheet2014[19,1] 
-puts sheet2014[19,2]
-#total black, below poverty
-puts sheet2014[13,1] 
-puts sheet2014[13,2]
-#total asian, below poverty
-puts sheet2014[15,1] 
-puts sheet2014[15,2]
-#total native american, below poverty
-puts sheet2014[14,1] 
-puts sheet2014[14,2]
-#total other race, below poverty
-puts sheet2014[17,1] 
-puts sheet2014[17,2]
-
-atlantic = {:county => ""}
-=end
+puts countylist[0]
