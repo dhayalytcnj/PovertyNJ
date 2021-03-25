@@ -72,7 +72,7 @@ def scrape()    #WORKS!
     x = 1
     while x < 63 do   # in data sheets, last county column is number 63
         countyHash = {
-            :county =>      sheet2014[0,x][0..-30],
+            :countyName =>      sheet2014[0,x][0..-30],
             :whiteTotal14 =>  sheet2014[11,x],
             :whitePov14 =>    sheet2014[11,x+1],
             :whiteTotal15 =>  sheet2015[11,x],
@@ -177,3 +177,20 @@ def map
 
 end
 
+
+#county class. Data from dataset
+class County
+    @@countyName = ""
+
+    @@countyData = []
+
+    @@countyOfficialContact = []    #NEED TO FIND
+
+    def countyName(x)
+        @@countyName = @@countyData[:countyName]
+    end
+
+    def addData(x)
+        @@countyData.push($DATA_SET[x])
+    end
+end
