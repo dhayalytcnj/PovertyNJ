@@ -47,7 +47,6 @@ $DATA_SET = Array.new #2d array with rows and columns... or could be a hashmappe
 })
 
 
-
 def scraper(filename)
     # scrape data from either downloaded file or site.
     #loop to clean and push into global array DATA_SET
@@ -75,18 +74,16 @@ def map
 end
 =end
 
-#data2014 = CSV.read('2014_2019_census_data\ACSST5Y2014.S1701-2021-03-24T223501.xls', :quote_char => "|")
-data2015 = CSV.read('2014_2019_census_data\ACSST5Y2015.S1701-2021-03-24T223430.csv', :quote_char => "|")
-data2016 = CSV.read('2014_2019_census_data\ACSST5Y2016.S1701-2021-03-24T223412.csv', :quote_char => "|")
-data2017 = CSV.read('2014_2019_census_data\ACSST5Y2017.S1701-2021-03-24T223356.csv', :quote_char => "|") 
-data2018 = CSV.read('2014_2019_census_data\ACSST5Y2018.S1701-2021-03-24T223338.csv', :quote_char => "|")
-data2019 = CSV.read('2014_2019_census_data\ACSST5Y2019.S1701-2021-03-24T223243.csv', :quote_char => "|")
-
 data2014 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2014.S1701-2021-03-24T223501.xls')
-sheet1 = data2014.worksheet('Sheet1')
-sheet1.each do |row|
-    puts row
-end
+data2015 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2015.S1701-2021-03-24T223430.xls')
+data2016 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2016.S1701-2021-03-24T223412.xls')
+data2017 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2017.S1701-2021-03-24T223356.xls')
+data2018 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2018.S1701-2021-03-24T223338.xls')
+data2019 = Spreadsheet.open('2014_2019_census_data\ACSST5Y2019.S1701-2021-03-24T223243.xls')
+
+
+sheet2014 = data2014.worksheet('Sheet1')
+puts sheet2014[0,1]
 
 #puts data2014[12][2]
 =begin
