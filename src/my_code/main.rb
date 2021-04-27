@@ -20,8 +20,7 @@ $data2019 = Spreadsheet.open('ACSST5Y2019.S1701-2021-03-24T223243.xls')
 # each row represents a county, and consists of racial population and their below poverty level population per year
 $DATA_SET = []
 
-#NEED TO LEARN FUSIONCHARTS GEM AND SEE IF PERMITTED. POTENTIALLY REASSIGN VALUES IN chart() method
-
+#UTILIZING FUSIONCHARTS. POTENTIALLY REASSIGN VALUES IN chart() method if necessary
 =begin
 @CHART = Fusioncharts::Chart.new({  #https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
     :height => 1,
@@ -174,6 +173,7 @@ def map
     # create interactive map of NJ.
     # https://www.fusioncharts.com/dev/getting-started/ruby-on-rails/your-first-map-using-ruby-on-rails
     # The map will be using a still image of an NJ map with their counties bordered. You would click a county to get to their data
+
 
 end
 
