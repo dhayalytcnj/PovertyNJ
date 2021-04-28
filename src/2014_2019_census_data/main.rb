@@ -5,7 +5,7 @@
 # Framework/Skeleton/Prototype:
 
 require 'spreadsheet'
-require 'fusioncharts' # https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
+#require 'fusioncharts' # https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
 
 #downloaded data tables, 55 rows by 67 columns. 54 x 66 in index notation
 $data2014 = Spreadsheet.open('ACSST5Y2014.S1701-2021-03-24T223501.xls')
@@ -20,42 +20,6 @@ $data2019 = Spreadsheet.open('ACSST5Y2019.S1701-2021-03-24T223243.xls')
 # each row represents a county, and consists of racial population and their below poverty level population per year
 $DATA_SET = []
 
-#NEED TO LEARN FUSIONCHARTS GEM AND SEE IF PERMITTED. POTENTIALLY REASSIGN VALUES IN chart() method
-
-=begin
-@CHART = Fusioncharts::Chart.new({  #https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
-    :height => 1,
-    :weight => 1,
-    :id => 'chart',
-    :type => '??',
-    :renderAt => '??'
-    :dataSource => '{ "chart": 
-        {
-            "caption": "Distribution of Races in Poverty",
-            "subcaption": "Races",
-            "paletteColors": "#2876DD,#0F283E",
-            "decimals": "0",
-            "numbersuffix": "%",
-            "placevaluesinside": "0",
-            "rotatevalues": "0",
-            "divlinealpha": "50",
-            "plotfillalpha": "80",
-            "drawCrossLine": "1",
-            "crossLineColor": "#F3F5F6",
-            "crossLineAlpha": "80",
-            "toolTipBgColor":"#ffffff",
-            "toolTipColor":"#000000",
-            "theme": "fint"
-        },
-        "categories": 
-        [
-            {"label1": " "},
-            {"label2": " "}
-            ...
-        ]
-    }'
-})
-=end
 
 def scrape()    #WORKS!
     # scrape data from either downloaded file
@@ -72,7 +36,7 @@ def scrape()    #WORKS!
     x = 1
     while x < 63 do   # in data sheets, last county column is number 63
         countyHash = {
-            :countyName =>      sheet2014[0,x][0..-30],
+            :countyName =>    sheet2014[0,x][0..-30],
             :whiteTotal14 =>  sheet2014[11,x],
             :whitePov14 =>    sheet2014[11,x+1],
             :whiteTotal15 =>  sheet2015[11,x],
@@ -159,25 +123,6 @@ def scrape()    #WORKS!
 end
 
 
-def chart1(dataSet)
-    # Chart for county selected
-    # modify data in chart global variable
-end
-
-
-def chart2(dataSet) 
-    # create another chart if needed
-end
-
-
-def map
-    # create interactive map of NJ.
-    # https://www.fusioncharts.com/dev/getting-started/ruby-on-rails/your-first-map-using-ruby-on-rails
-    # The map will be using a still image of an NJ map with their counties bordered. You would click a county to get to their data
-
-end
-
-
 #county class. Data from dataset
 class County
     @@countyName = ""
@@ -187,10 +132,15 @@ class County
     @@countyOfficialContact = []    #NEED TO FIND
 
     def countyName(x)
-        @@countyName = @@countyData[:countyName]
+        @@countyName = @@countyData[x][:countyName]
     end
 
     def addData(x)
         @@countyData.push($DATA_SET[x])
     end
+end
+
+scrape()
+for x in $DATA_SET
+    puts x[:countyName]
 end
