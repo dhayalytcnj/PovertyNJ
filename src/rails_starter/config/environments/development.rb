@@ -65,5 +65,5 @@ Rails.application.configure do
   # Devise host settings
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   config.hosts.clear
-  config.hosts << "csc415-serverxx.hpc.tcnj.edu"
+  config.hosts << "csc415-server33.hpc.tcnj.edu"
 end
