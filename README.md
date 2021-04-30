@@ -4,6 +4,8 @@ This is the readme for Yash's Assignment 2 project: PovertyNJ
 
 Project reads 2014 & 2019 NJ Counties' racial population and their below poverty population numbers, and uses that to show the racial and poverty population displacement from 2014-2019 per county. Project uses Ruby on Rails and MapBox.
 
+For Usage, refer to this repository's [wiki](https://github.com/dhayalytcnj/PovertyNJ/wiki/How-to-Use-or-Contribute)
+
 ![alt text](https://github.com/dhayalytcnj/PovertyNJ/blob/f0949a5c1cf3e2b810880568d16db270c0bd6919/docs/mainpage%20pic.PNG)
 
 
@@ -23,7 +25,3 @@ this folder can be broken down to 2 components
 * "main.rb" ruby file that contains the code to edit the non-edited GeoJSON into the edited GeoJSON
 * A copy of the HTML file already in the rails starter to work on.
 * Base readme.
-
-
-# Usage:
-[See How to Use or Contribute on Wiki](https://github.com/dhayalytcnj/PovertyNJ/wiki/How-to-Use-or-Contribute) 
