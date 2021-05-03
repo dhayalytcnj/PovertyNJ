@@ -1,3 +1,5 @@
+<!-- Yash's page code-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +42,7 @@
     
    #sidebar {
       position:absolute;
-      width:20%;
+      width:24.5%;
       height:100%;
       top:0;left:0;
       margin-left: 10px;
@@ -52,7 +54,7 @@
    .pad2 {
     padding:0px;
    }
-    #map { position:absolute; left: 21%; width: 79%; top:0; bottom:0; width:100%; }
+    #map { position:absolute; left: 25%; width: 75%; top:0; bottom:0; width:100%; }
     /**
     * Set rules for how the map overlays
     * (info box and legend) will be displayed
@@ -108,8 +110,9 @@
  <div class='sidebar'>
    <div id='sidebar'>
      <div class='gallery'>
-      <img src='povertyNJ_logo2.png' width=70% height=70%></a> 
-       <div class='row'>The data below is constructed from 2014 and 2019 Poverty Status in the Past 12 Months tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The tables are from the US Census Bereau's public database<br><br>Click on a county for its specific data.<br><br></div>
+       <!-- Need to somehow get Rails to recognize my image. It just refuses to read it-->
+      <img src="povertyNJ_logo2.png" alt="PovertyNJ" width=200px height=200px></a> 
+       <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>Click on a county for its specific data.<br><br></div>
     
     <div class='heading' style='background-color: #FFFFFF'>
       <div id="tooltip"></div>
@@ -152,45 +155,46 @@ map.on('load', function() {   // Map legend labelling and interaction with sideb
     legend.appendChild(item);
   }
   
+  // This for the life of me just refues to run. Something with the layer name, id is making it not run the clicking functionality.
   map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ["basic-v1"] });
-    for (i in features) {
-      if (features[i].layer.id == "countyData") {
-         document.getElementById('tooltip').innerHTML = 
-         ('<b>Selected County:</b>' + (features[i].properties.COUNTY_LAB).toFixed(0) + '<br/> ' + 
-         '<br/>Total Population in 2014:  ' + (features[i].properties.totPop14).toFixed(0) + 
-         '<br/>Percent of Population in Poverty 2014:  ' + (features[i].properties.povPercent14).toFixed(0) + '%' + 
-         '<br/>Total Population in 2019:  ' + (features[i].properties.totalPop19).toFixed(0) + 
-         '<br/>Percent of Population in Poverty 2019:  ' + (features[i].properties.povPercent19).toFixed(0) + '%' + 
+    var features = map.queryRenderedFeatures(e.point, { layers: ["countyData"] });
+    features = features[0]
+    console.log(typeof features.properties.povPercent14)
+  if (features.layer.id == "countyData") {
+    document.getElementById('tooltip').innerHTML = 
+      ('<b>Selected County: </b>' + features.properties.COUNTY_LAB.bold().italics() + '<br/> ' + 
+      '<br/>Total Population in 2014:  ' + ( features.properties.totalPop14.toLocaleString("en-US") ) + 
+      '<br/>Percent of Population in Poverty in 2014:  ' + (features.properties.PovPercent14) + '%' + 
+      '<br/>Total Population in 2019:  ' + (features.properties.totalPop19.toLocaleString("en-US") ) + 
+      '<br/>Percent of Population in Poverty 2019:  ' + (features.properties.PovPercent19) + '%' + 
 
-         '<br/> ' + '</br><b>Change for each Race:</b>' + '<br/> ' + 
+      '<br/> ' + '</br><b>Change for each Race:</b>' + '<br/> ' + 
 
-         '<br/>Change in total White population:  ' + (features[i].properties.whiteTotDelta).toFixed(1) + 
-         '<br/>Change in White population in Poverty:  ' + (features[i].properties.whitePovDelta).toFixed(1) + '<br/> ' + 
+      '<br/>Change in total White population:  ' + (features.properties.whiteTotDelta) + 
+      '<br/>Change in White population in Poverty:  ' + (features.properties.whitePovDelta) + '<br/> ' + 
 
-         '<br/>Change in total Hispanic population:  ' + (features[i].properties.hispTotDelta).toFixed(1) + 
-         '<br/>Change in Hispanic population in Poverty:  ' + (features[i].properties.hispPovDelta).toFixed(1) + '<br/>' +
+      '<br/>Change in total Hispanic population:  ' + (features.properties.hispTotDelta) + 
+      '<br/>Change in Hispanic population in Poverty:  ' + (features.properties.hispPovDelta) + '<br/>' +
 
-         '<br/>Change in total Black population:  ' + (features[i].properties.blackTotDelta).toFixed(1)  + 
-         '<br/>Change in Black population in Poverty:  ' + (features[i].properties.blackPovDelta).toFixed(1) + '<br/> ' + 
+      '<br/>Change in total Black population:  ' + (features.properties.blackTotDelta)  + 
+      '<br/>Change in Black population in Poverty:  ' + (features.properties.blackPovDelta) + '<br/> ' + 
 
-         '<br/>Change in total Asian population:  ' + (features[i].properties.asianTotDelta).toFixed(1)  + 
-         '<br/>Change in Asian population in Poverty:  ' + features[i].properties.asianPovDetlta).toFixed(1) + '<br/> ' + 
+      '<br/>Change in total Asian population:  ' + (features.properties.asianTotDelta)  + 
+      '<br/>Change in Asian population in Poverty:  ' + features.properties.asianPovDetlta) + '<br/> ' + 
 
-         '<br/>Change in total Native American population:  ' + (features[i].properties.nativeTotDelta).toFixed(1) + 
-         '<br/>Change in Native American population in Poverty:  ' + (features[i].properties.nativePovDelta).toFixed(1) + '<br/> ' +
+      '<br/>Change in total Native American population:  ' + (features.properties.nativeTotDelta) + 
+      '<br/>Change in Native American population in Poverty:  ' + (features.properties.nativePovDelta) + '<br/> ' +
 
-         '<br/>Change in total Other population:  ' + (features[i].properties.otherTotDelta).toFixed(1)  + 
-         '<br/>Change in Other population in Poverty:  ' + (features[i].properties.otherPovDelta ).toFixed(1);
-        
-         if (clickedStateId) {
-           map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":false})
-        }
-        clickedStateId = features[i][id];
-        map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":true})
-        return;
-      }
+      '<br/>Change in total Other population:  ' + (features.properties.otherTotDelta)  + 
+      '<br/>Change in Other population in Poverty:  ' + (features.properties.otherPovDelta);
+    
+    if (clickedStateId) {
+      map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":false})
     }
+    clickedStateId = features[id];
+    map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":true})
+    return;
+  }
  });
      map.getCanvas().style.cursor = 'default';
 });
