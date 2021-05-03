@@ -19,4 +19,4 @@ All user code and data files are within /src/2014_2019_census_data/ folder:
 * County_Boundairies_of_NJ.zip - Zipped folder contains the original geospatial data files (.shp, .cpg, .shx, , etc.) which are needed to be converted into a geojson file.
 * index.html - copy of the hmtl code used in /src/rails_starter/app/views/home/index.html.erb
 * main.rb - ruby code file that scrapes the 2 .xls datasets and the non-edited geojson file, and adds the necessary data to the non-edited geojson file to be used with Mapbox.
-* povertyNJ_logo2.png - image used in
+* povertyNJ_logo2.png - copy of image located at /src/rails_starter/app/assets/images/povertyNJ_logo2.png .
