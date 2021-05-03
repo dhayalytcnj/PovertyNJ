@@ -25,7 +25,7 @@ this folder can be broken down to 2 components
 * user-related data and code within /2014_2019_census_data/
 * Ruby on Rails starter kit within /rails_starter/
 
-# /2014_2019_census_data/ Folder
+# /src/2014_2019_census_data/ Folder
 All user code and data files are within /src/2014_2019_census_data/ folder:
 
 * /Style_layer/ folder that contains mapbox style json file
