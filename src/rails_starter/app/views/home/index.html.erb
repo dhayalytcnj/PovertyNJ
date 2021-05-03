@@ -104,14 +104,14 @@
 </head>
 <body>
   <div id='map'></div>
-  <div class='map-overlay' id='legend'><p><b>Total Percentage of Population under Poverty in 2019</b></p></div>
-  <div class='map-overlay' id='features'><h2>Poverty Displacement in NJ Counties,<br> 2014 to 2019</h2></div>
+  <div class='map-overlay' id='legend'><p><b>Percentage of Population in Poverty, 2019</b></p></div>
+  <div class='map-overlay' id='features'><h2>Poverty in NJ Counties,<br> 2014 to 2019</h2></div>
 
  <div class='sidebar'>
    <div id='sidebar'>
      <div class='gallery'>
        <!-- Need to somehow get Rails to recognize my image. It just refuses to read it-->
-      <img src="povertyNJ_logo2.png" alt="PovertyNJ" width=200px height=200px></a> 
+      <%= image_tag("/images/povertyNJ_logo2.png",  style: "width:190px; height:190px; margin:0px 70px;")%> </a> 
        <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>Click on a county for its specific data.<br><br></div>
     
     <div class='heading' style='background-color: #FFFFFF'>
@@ -120,7 +120,7 @@
       </br></div>
 
     <script>
-      mapboxgl.accessToken = 'pk.eyJ1IjoiZGhheWFseXRjbmoiLCJhIjoiY2tvMGJtcHRiMDh3czJvbTNsMnF1N3o4NiJ9.yRmwIPrSMJagiBmjrN-kcw';  // access token to use my mapbox style
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZGhheWFseXRjbmoiLCJhIjoiY2tvMGJtcHRiMDh3czJvbTNsMnF1N3o4NiJ9.yRmwIPrSMJagiBmjrN-kcw'; // access token to use my mapbox style. Set to read only
       
       var bounds = [  // To limit scope of map
         [-77.56,36.93], // Southwest bounds
@@ -158,8 +158,7 @@ map.on('load', function() {   // Map legend labelling and interaction with sideb
   // This for the life of me just refues to run. Something with the layer name, id is making it not run the clicking functionality.
   map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, { layers: ["countyData"] });
-    features = features[0]
-    console.log(typeof features.properties.povPercent14)
+    features = features[0] //only 1 layer in feature
   if (features.layer.id == "countyData") {
     document.getElementById('tooltip').innerHTML = 
       ('<b>Selected County: </b>' + features.properties.COUNTY_LAB.bold().italics() + '<br/> ' + 
@@ -168,7 +167,7 @@ map.on('load', function() {   // Map legend labelling and interaction with sideb
       '<br/>Total Population in 2019:  ' + (features.properties.totalPop19.toLocaleString("en-US") ) + 
       '<br/>Percent of Population in Poverty 2019:  ' + (features.properties.PovPercent19) + '%' + 
 
-      '<br/> ' + '</br><b>Change for each Race:</b>' + '<br/> ' + 
+      '<br/> ' + '</br><b>Change for each Race from 2014 to 2019:</b>' + '<br/> ' + 
 
       '<br/>Change in total White population:  ' + (features.properties.whiteTotDelta) + 
       '<br/>Change in White population in Poverty:  ' + (features.properties.whitePovDelta) + '<br/> ' + 
