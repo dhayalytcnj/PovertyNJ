@@ -107,9 +107,8 @@
  <div class='sidebar'>
    <div id='sidebar'>
      <div class='gallery'>
-       <!-- Need to somehow get Rails to recognize my image. It just refuses to read it-->
       <%= image_tag("povertyNJ_logo2.png",  :width=>190, :height=>190)%> </a> 
-       <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>Click on a county for its specific data.<br><br></div>
+       <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>Click on a county for its specific data.<br> <a href="https://www.nj.gov/nj/gov/county/counties.html">Contact gounty government offices</a> <br></div>
     
     <div class='heading' style='background-color: #FFFFFF'>
       <div id="tooltip"></div>
@@ -152,7 +151,7 @@ map.on('load', function() {   // Map legend labelling and interaction with sideb
     legend.appendChild(item);
   }
   
-  // This for the life of me just refues to run. Something with the layer name, id is making it not run the clicking functionality.
+  // Map clicking function
   map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, { layers: ["countyData"] });
     features = features[0] //only 1 layer in feature
