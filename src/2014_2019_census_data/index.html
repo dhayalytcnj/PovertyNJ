@@ -108,7 +108,7 @@
    <div id='sidebar'>
      <div class='gallery'>
       <%= image_tag("povertyNJ_logo2.png",  :width=>190, :height=>190)%> </a> 
-       <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>  <a target="_blank" href="https://www.nj.gov/nj/gov/county/counties.html">Contact county government offices</a> <br><br> Click on a county for its specific data.<br><br></div>
+       <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>  <a target="_blank"  href="https://www.nj.gov/nj/gov/county/counties.html">Contact county government offices</a> <br><br> Click on a county for its specific data.<br><br></div>
     
     <div class='heading' style='background-color: #FFFFFF'>
       <div id="tooltip"></div>
@@ -154,7 +154,7 @@ map.on('load', function() {   // Map legend labelling and interaction with sideb
   // Map clicking function
   map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, { layers: ["countyData"] });
-    features = features[0] //only 1 layer in feature
+	features = features[0] //only 1 layer in feature	
   if (features.layer.id == "countyData") {
     document.getElementById('tooltip').innerHTML = 
       ('<b>Selected County: </b>' + features.properties.COUNTY_LAB.bold().italics() + '<br/> ' + 
@@ -183,10 +183,15 @@ map.on('load', function() {   // Map legend labelling and interaction with sideb
       '<br/>Change in total Other population:  ' + (features.properties.otherTotDelta)  + 
       '<br/>Change in Other population in Poverty:  ' + (features.properties.otherPovDelta);
     
+    new mapboxgl.Popup() // popup feature
+	.setLngLat(e.lngLat)
+	.setHTML(features.properties.COUNTY_LAB)
+	.addTo(map);
+
     if (clickedStateId) {
       map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":false})
     }
-    clickedStateId = features[id];
+    clickedStateId = features.id;
     map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":true})
     return;
   }
