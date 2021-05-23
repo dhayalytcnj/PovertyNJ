@@ -5,14 +5,11 @@
 # Framework/Skeleton/Prototype:
 
 require 'spreadsheet'
-require 'fusioncharts' # https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
+require 'json'
+
 
 #downloaded data tables, 55 rows by 67 columns. 54 x 66 in index notation
 $data2014 = Spreadsheet.open('ACSST5Y2014.S1701-2021-03-24T223501.xls')
-$data2015 = Spreadsheet.open('ACSST5Y2015.S1701-2021-03-24T223430.xls')
-$data2016 = Spreadsheet.open('ACSST5Y2016.S1701-2021-03-24T223412.xls')
-$data2017 = Spreadsheet.open('ACSST5Y2017.S1701-2021-03-24T223356.xls')
-$data2018 = Spreadsheet.open('ACSST5Y2018.S1701-2021-03-24T223338.xls')
 $data2019 = Spreadsheet.open('ACSST5Y2019.S1701-2021-03-24T223243.xls')
 
 
@@ -20,42 +17,6 @@ $data2019 = Spreadsheet.open('ACSST5Y2019.S1701-2021-03-24T223243.xls')
 # each row represents a county, and consists of racial population and their below poverty level population per year
 $DATA_SET = []
 
-#NEED TO LEARN FUSIONCHARTS GEM AND SEE IF PERMITTED. POTENTIALLY REASSIGN VALUES IN chart() method
-
-=begin
-@CHART = Fusioncharts::Chart.new({  #https://www.fusioncharts.com/blog/creating-charts-ruby-on-rails/
-    :height => 1,
-    :weight => 1,
-    :id => 'chart',
-    :type => '??',
-    :renderAt => '??'
-    :dataSource => '{ "chart": 
-        {
-            "caption": "Distribution of Races in Poverty",
-            "subcaption": "Races",
-            "paletteColors": "#2876DD,#0F283E",
-            "decimals": "0",
-            "numbersuffix": "%",
-            "placevaluesinside": "0",
-            "rotatevalues": "0",
-            "divlinealpha": "50",
-            "plotfillalpha": "80",
-            "drawCrossLine": "1",
-            "crossLineColor": "#F3F5F6",
-            "crossLineAlpha": "80",
-            "toolTipBgColor":"#ffffff",
-            "toolTipColor":"#000000",
-            "theme": "fint"
-        },
-        "categories": 
-        [
-            {"label1": " "},
-            {"label2": " "}
-            ...
-        ]
-    }'
-})
-=end
 
 def scrape()    #WORKS!
     # scrape data from either downloaded file
@@ -63,95 +24,59 @@ def scrape()    #WORKS!
     # each row would be based on county
 
     sheet2014 = $data2014.worksheet('Sheet1')
-    sheet2015 = $data2015.worksheet('Sheet1')
-    sheet2016 = $data2016.worksheet('Sheet1')
-    sheet2017 = $data2017.worksheet('Sheet1')
-    sheet2018 = $data2018.worksheet('Sheet1')
     sheet2019 = $data2019.worksheet('Sheet1')
 
     x = 1
     while x < 63 do   # in data sheets, last county column is number 63
         countyHash = {
-            :countyName =>      sheet2014[0,x][0..-30],
-            :whiteTotal14 =>  sheet2014[11,x],
-            :whitePov14 =>    sheet2014[11,x+1],
-            :whiteTotal15 =>  sheet2015[11,x],
-            :whitePov15 =>    sheet2015[11,x+1],
-            :whiteTotal16 =>  sheet2016[11,x],
-            :whitePov16 =>    sheet2016[11,x+1],
-            :whiteTotal17 =>  sheet2017[11,x],
-            :whitePov17 =>    sheet2017[11,x+1],
-            :whiteTotal18 =>  sheet2018[11,x],
-            :whitePov18 =>    sheet2018[11,x+1],
-            :whiteTotal19 =>  sheet2019[11,x],
-            :whitePov19 =>    sheet2019[11,x+1],
+            :countyName =>    sheet2014[0,x][0..-30],       #county name
 
-            :hispTotal14 =>   sheet2014[10,x],
-            :hispPov14 =>     sheet2014[10,x+1],
-            :hispTotal15 =>   sheet2015[10,x],
-            :hispPov15 =>     sheet2015[10,x+1],
-            :hispTotal16 =>   sheet2016[10,x],
-            :hispPov16 =>     sheet2016[10,x+1],
-            :hispTotal17 =>   sheet2017[10,x],
-            :hispPov17 =>     sheet2017[10,x+1],
-            :hispTotal18 =>   sheet2018[10,x],
-            :hispPov18 =>     sheet2018[10,x+1],
-            :hispTotal19 =>   sheet2019[10,x],
-            :hispPov19 =>     sheet2019[10,x+1],
+            :totalPop14 =>    sheet2014[1,x].to_s.gsub(',','').to_i,    # total population of county in 2014
+            :PovPercent14 => (sheet2014[1,x+2].to_s.gsub(',','').to_f * 100).round(3),   # total poverty percentage of county in 2014
+            :totalPop19 =>    sheet2019[1,x].to_s.gsub(',','').to_i,    # total population of county in 2019
+            :PovPercent19 => (sheet2019[1,x+2].to_s.gsub(',','').to_f * 100).round(3),   # total poverty percentage of county in 2019
 
-            :blackTotal14 =>  sheet2014[4,x],
-            :blackPov14 =>    sheet2014[4,x+1],
-            :blackTotal15 =>  sheet2015[4,x],
-            :blackPov15 =>    sheet2015[4,x+1],
-            :blackTotal16 =>  sheet2016[4,x],
-            :blackPov16 =>    sheet2016[4,x+1],
-            :blackTotal17 =>  sheet2017[4,x],
-            :blackPov17 =>    sheet2017[4,x+1],
-            :blackTotal18 =>  sheet2018[4,x],
-            :blackPov18 =>    sheet2018[4,x+1],
-            :blackTotal19 =>  sheet2019[4,x],
-            :blackPov19 =>    sheet2019[4,x+1],
+        #    :whiteTotal14 =>  sheet2014[11,x].to_s.gsub(',','').to_i,  # Total white pop in county in 2014
+        #    :whitePov14 =>    sheet2014[11,x+1].to_s.gsub(',','').to_i, # Total white poverty pop in county in 2014
+        #    :whiteTotal19 =>  sheet2019[11,x].to_s.gsub(',','').to_i,  # total white pop in county 2019
+        #    :whitePov19 =>    sheet2019[11,x+1].to_s.gsub(',','').to_i, # total white poverty pop in county in 2019
+            :whiteTotDelta => (sheet2019[11,x].to_s.gsub(',','').to_i) - (sheet2014[11,x].to_s.gsub(',','').to_i),     # total white pop change
+            :whitePovDelta => (sheet2019[11,x+1].to_s.gsub(',','').to_i) - (sheet2014[11,x+1].to_s.gsub(',','').to_i), # total white poverty pop change
 
-            :asianTotal14 =>  sheet2014[6,x],
-            :asianPov14 =>    sheet2014[6,x+1],
-            :asianTotal15 =>  sheet2015[6,x],
-            :asianPov15 =>    sheet2015[6,x+1],
-            :asianTotal16 =>  sheet2016[6,x],
-            :asianPov16 =>    sheet2016[6,x+1],
-            :asianTotal17 =>  sheet2017[6,x],
-            :asianPov17 =>    sheet2017[6,x+1],
-            :asianTotal18 =>  sheet2018[6,x],
-            :asianPov18 =>    sheet2018[6,x+1],
-            :asianTotal19 =>  sheet2019[6,x],
-            :asianPov19 =>    sheet2019[6,x+1],
+        #    :hispTotal14 =>   sheet2014[10,x].to_s.gsub(',','').to_i,
+        #    :hispPov14 =>     sheet2014[10,x+1].to_s.gsub(',','').to_i,
+        #    :hispTotal19 =>   sheet2019[10,x].to_s.gsub(',','').to_i,
+        #    :hispPov19 =>     sheet2019[10,x+1].to_s.gsub(',','').to_i,
+            :hispTotDelta => (sheet2019[10,x].to_s.gsub(',','').to_i) - (sheet2014[10,x].to_s.gsub(',','').to_i),
+            :hispPovDelta => (sheet2019[10,x+1].to_s.gsub(',','').to_i) - (sheet2014[10,x+1].to_s.gsub(',','').to_i),
 
+        #    :blackTotal14 =>  sheet2014[4,x].to_s.gsub(',','').to_i,
+        #    :blackPov14 =>    sheet2014[4,x+1].to_s.gsub(',','').to_i,
+        #    :blackTotal19 =>  sheet2019[4,x].to_s.gsub(',','').to_i,
+        #    :blackPov19 =>    sheet2019[4,x+1].to_s.gsub(',','').to_i,
+            :blackTotDelta => (sheet2019[4,x].to_s.gsub(',','').to_i) - (sheet2014[4,x].to_s.gsub(',','').to_i),
+            :blackPovDelta => (sheet2019[4,x+1].to_s.gsub(',','').to_i) - (sheet2014[4,x+1].to_s.gsub(',','').to_i),
 
-            :nativeTotal14 => sheet2014[5,x],
-            :nativePov14 =>   sheet2014[5,x+1],
-            :nativeTotal15 => sheet2015[5,x],
-            :nativePov15 =>   sheet2015[5,x+1],
-            :nativeTotal16 => sheet2016[5,x],
-            :nativePov16 =>   sheet2016[5,x+1],
-            :nativeTotal17 => sheet2017[5,x],
-            :nativePov17 =>   sheet2017[5,x+1],
-            :nativeTotal18 => sheet2018[5,x],
-            :nativePov18 =>   sheet2018[5,x+1],
-            :nativeTotal19 => sheet2019[5,x],
-            :nativePov19 =>   sheet2019[5,x+1],
+        #    :asianTotal14 =>  sheet2014[6,x].to_s.gsub(',','').to_i,
+        #    :asianPov14 =>    sheet2014[6,x+1].to_s.gsub(',','').to_i,
+        #    :asianTotal19 =>  sheet2019[6,x].to_s.gsub(',','').to_i,
+        #    :asianPov19 =>    sheet2019[6,x+1].to_s.gsub(',','').to_i,
+            :asianTotDelta => (sheet2019[6,x].to_s.gsub(',','').to_i) - (sheet2014[6,x].to_s.gsub(',','').to_i),
+            :asianPovDetlta => (sheet2019[6,x+1].to_s.gsub(',','').to_i) - (sheet2014[6,x+1].to_s.gsub(',','').to_i),
 
+        #    :nativeTotal14 => sheet2014[5,x].to_s.gsub(',','').to_i,
+        #    :nativePov14 =>   sheet2014[5,x+1].to_s.gsub(',','').to_i,
+        #    :nativeTotal19 => sheet2019[5,x].to_s.gsub(',','').to_i,
+        #    :nativePov19 =>   sheet2019[5,x+1].to_s.gsub(',','').to_i,
+            :nativeTotDelta => (sheet2019[5,x].to_s.gsub(',','').to_i) - (sheet2014[5,x].to_s.gsub(',','').to_i),
+            :nativePovDelta => (sheet2019[5,x+1].to_s.gsub(',','').to_i) - (sheet2014[5,x+1].to_s.gsub(',','').to_i),
 
-            :otherTotal14 =>  sheet2014[8,x],
-            :otherPov14 =>    sheet2014[8,x+1],
-            :otherTotal15 =>  sheet2015[8,x],
-            :otherPov15 =>    sheet2015[8,x+1],
-            :otherTotal16 =>  sheet2016[8,x],
-            :otherPov16 =>    sheet2016[8,x+1],
-            :otherTotal17 =>  sheet2017[8,x],
-            :otherPov17 =>    sheet2017[8,x+1],
-            :otherTotal18 =>  sheet2018[8,x],
-            :otherPov18 =>    sheet2018[8,x+1],
-            :otherTotal19 =>  sheet2019[8,x],
-            :otherPov19 =>    sheet2019[8,x+1]
+        #    :otherTotal14 =>  sheet2014[8,x].to_s.gsub(',','').to_i,
+        #    :otherPov14 =>    sheet2014[8,x+1].to_s.gsub(',','').to_i,
+        #    :otherTotal19 =>  sheet2019[8,x].to_s.gsub(',','').to_i,
+        #    :otherPov19 =>    sheet2019[8,x+1].to_s.gsub(',','').to_i,
+            :otherTotDelta => (sheet2019[8,x].to_s.gsub(',','').to_i) - (sheet2014[8,x].to_s.gsub(',','').to_i),
+            :otherPovDelta => (sheet2019[8,x+1].to_s.gsub(',','').to_i) - (sheet2014[8,x+1].to_s.gsub(',','').to_i)
         }
         $DATA_SET.push(countyHash)
         x = x + 3
@@ -159,38 +84,49 @@ def scrape()    #WORKS!
 end
 
 
-def chart1(dataSet)
-    # Chart for county selected
-    # modify data in chart global variable
-end
+# Main commands
+scrape()
 
+map_file = File.read('County_Boundaries_of_NJ.geojson') #reading geojson file to add necessary properties
+parsed_map = JSON.parse(map_file)
+dataSetJson = JSON.parse($DATA_SET.to_json)
+#puts dataSetJson
 
-def chart2(dataSet) 
-    # create another chart if needed
-end
+id = 1  # variable for adding missing ID component
+for x in parsed_map['features']
+    a = x['properties']['COUNTY_LAB']  # assigning a temp variable for simplicity
 
+    for y in dataSetJson
+        b = y['countyName']  # assigning temp variable for simplicity
+        
+        if a == b # if county names match, add county stats from hash to parsed map
+            x['id'] = id.to_s
+            x['properties']['totalPop14'] = y['totalPop14']
+            x['properties']['PovPercent14'] = y['PovPercent14']
+            x['properties']['totalPop19'] = y['totalPop19']
+            x['properties']['PovPercent19'] = y['PovPercent19']
 
-def map
-    # create interactive map of NJ.
-    # https://www.fusioncharts.com/dev/getting-started/ruby-on-rails/your-first-map-using-ruby-on-rails
-    # The map will be using a still image of an NJ map with their counties bordered. You would click a county to get to their data
+            x['properties']['whiteTotDelta'] = y['whiteTotDelta']
+            x['properties']['whitePovDelta'] = y['whitePovDelta']
 
-end
+            x['properties']['hispTotDelta'] = y['hispTotDelta']
+            x['properties']['hispPovDelta'] = y['hispPovDelta']
+            
+            x['properties']['blackTotDelta'] = y['blackTotDelta']
+            x['properties']['blackPovDelta'] = y['blackPovDelta']
 
+            x['properties']['asianTotDelta'] = y['asianTotDelta']
+            x['properties']['asianPovDetlta'] = y['asianPovDetlta']
 
-#county class. Data from dataset
-class County
-    @@countyName = ""
+            x['properties']['nativeTotDelta'] = y['nativeTotDelta']
+            x['properties']['nativePovDelta'] = y['nativePovDelta']
 
-    @@countyData = []
-
-    @@countyOfficialContact = []    #NEED TO FIND
-
-    def countyName(x)
-        @@countyName = @@countyData[:countyName]
+            x['properties']['otherTotDelta'] = y['otherTotDelta']
+            x['properties']['otherPovDelta'] = y['otherPovDelta']
+            break
+        end
     end
-
-    def addData(x)
-        @@countyData.push($DATA_SET[x])
-    end
+    id += 1
 end
+
+File.write('County_Boundaries_of_NJ_EDITED.geojson', JSON.dump(parsed_map)) #writing updated geojson data into a new file

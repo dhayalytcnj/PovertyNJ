@@ -1,0 +1,7 @@
+1. Discussion of how the design of the system demonstrates appropriate use of modularity and encapsulation, and how the data structure(s) / database, and algorithm(s) are efficient and elegant, and appropriate for the system.
+
+So everything is somewhat isolated from each other, other than using the dataset array, and the functions dont interact much with eachother. In fact, the only way the functions and class are connected is that they use the dataset array, thus being modular. A way I could make this better is by putting all the functions and dataset array inside another class, make the dataset array private, and using getters and setters to interact with the dataset array.
+
+2. Discussion of how the feedback received on submissions for 2-A and 2-B is evaluated, documented and incorporated where appropriate, in good detail along with rationale for choices made.
+
+Based on the feedback, the key aspects targeted were the method of communicating with county legislature, what the NJ map of county will exactly do, and the way the selected county's data be displayed. For that, I've assigned issues to target those problems so then I can verify that it is as needed.

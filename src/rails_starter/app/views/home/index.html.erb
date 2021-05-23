@@ -1,0 +1,198 @@
+<!-- Yash's page code-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset='utf-8' />
+  <title>NJ Poverty by County Statistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet"/>
+
+  <style>
+    body { 
+      margin:0; 
+      padding:0; 
+    }
+    h2,
+    h3 {
+      margin: 10px;
+      font-size: 1.2em;
+    }
+    h4 {
+      font-size: 1.0em;
+      margin: 10px;
+      text-align: left;
+    }
+    h5 {
+      font-size: 0.9em;
+      margin: 10px;
+      text-align: left;
+    }
+    h6 {
+      font-size: 0.9em;
+      margin: 10px;
+      text-align: left;
+    }
+    p {
+      font-size: .9em;
+      margin: 13px;
+      text-align: left;
+    }
+    
+   #sidebar {
+      position:absolute;
+      width:24.5%;
+      height:100%;
+      top:0;left:0;
+      margin-left: 10px;
+      overflow: auto;
+      font-size:0.9em;
+      font-family:Arial, sans-serif;      
+  }
+
+   .pad2 {
+    padding:0px;
+   }
+    #map { position:absolute; left: 25%; width: 75%; top:0; bottom:0; width:100%; }
+    /* Map page layout */
+    .map-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.8);
+      margin-right: 20px;
+      font-family: Arial, sans-serif;
+      overflow: auto;
+      border-radius: 3px;
+    }
+    #features {
+      top: 0;
+      height: 70px;
+      margin-top: 10px;
+      width: 450px;
+    }
+    #legend {
+      padding: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      line-height: 18px;
+      height: 350px;
+      margin-bottom: 40px;
+      width: 190px;
+    }
+    .legend-key {
+      display: inline-block;
+      border-radius: 20%;
+      width: 10px;
+      height: 25px;
+      margin-right: 20px;
+    }
+    #btn-group button {
+    background-color: #008CBA; /* Blue */
+    border: none;
+    color: white;
+    padding: 100px 160px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div id='map'></div>
+  <div class='map-overlay' id='legend'><p><b>Percentage of Population in Poverty, 2019</b></p></div>
+  <div class='map-overlay' id='features'><h2>Population & Poverty in NJ Counties <br> 2014 - 2019</h2></div>
+
+ <div class='sidebar'>
+   <div id='sidebar'>
+     <div class='gallery'>
+      <%= image_tag("povertyNJ_logo2.png",  :width=>190, :height=>190)%> </a> 
+       <div class='row'>The statistics below are constructed from 2014 and 2019 Poverty Status tables that were centralized to NJ counties, utilizing ACS 5-year estimate versions for accuracy. The data is from the US Census Bereau's public database.<br><br>  <a href="https://www.nj.gov/nj/gov/county/counties.html">Contact county government offices</a> <br><br> Click on a county for its specific data.<br><br></div>
+    
+    <div class='heading' style='background-color: #FFFFFF'>
+      <div id="tooltip"></div>
+      <div class='row'> 
+      </br></div>
+
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZGhheWFseXRjbmoiLCJhIjoiY2tvMGJtcHRiMDh3czJvbTNsMnF1N3o4NiJ9.yRmwIPrSMJagiBmjrN-kcw'; // access token to use my mapbox style. Set to read only
+      
+      var bounds = [  // To limit scope of map
+        [-77.56,36.93], // Southwest bounds
+        [-69.9,43.36] // Northeast bounds
+      ];
+
+      var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/dhayalytcnj/cko0c6fqv457q18nxc8ju8vjd', // where map style is stored in MapBox
+        center: [-74.731, 40.154],
+        zoom: 2,
+        maxBounds: bounds // restricts map to bounds
+      });
+      var clickedStateId =  null;
+      
+
+map.on('load', function() {   // Map legend labelling and interaction with sidebar
+  // legend labelling
+  var layers = ['< 4.5%', '4.5% to 6%', '6% to 7.5%', '7.5% to 9%', '9% to 10.5%', '10.5% to 12%', '12% to 13.5%','13.5% to 15%','> 15%'];
+  var colors = ['#fff2b8', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#8E0101', '#49000E'];
+  for (i = 0; i < layers.length; i++) {
+    var layer = layers[i];
+    var color = colors[i];
+    var item = document.createElement('div');
+    var key = document.createElement('span');
+    key.className = 'legend-key';
+    key.style.backgroundColor = color;
+    var value = document.createElement('span');
+    value.innerHTML = layer;
+    item.appendChild(key);
+    item.appendChild(value);
+    legend.appendChild(item);
+  }
+  
+  // Map clicking function
+  map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ["countyData"] });
+    features = features[0] //only 1 layer in feature
+  if (features.layer.id == "countyData") {
+    document.getElementById('tooltip').innerHTML = 
+      ('<b>Selected County: </b>' + features.properties.COUNTY_LAB.bold().italics() + '<br/> ' + 
+      '<br/>Total Population in 2014:  ' + ( features.properties.totalPop14.toLocaleString("en-US") ) + 
+      '<br/>Percent of Population in Poverty in 2014:  ' + (features.properties.PovPercent14) + '%' + 
+      '<br/>Total Population in 2019:  ' + (features.properties.totalPop19.toLocaleString("en-US") ) + 
+      '<br/>Percent of Population in Poverty 2019:  ' + (features.properties.PovPercent19) + '%' + 
+
+      '<br/> ' + '</br><b>Change for each Race from 2014 to 2019:</b>' + '<br/> ' + 
+
+      '<br/>Change in total White population:  ' + (features.properties.whiteTotDelta) + 
+      '<br/>Change in White population in Poverty:  ' + (features.properties.whitePovDelta) + '<br/> ' + 
+
+      '<br/>Change in total Hispanic population:  ' + (features.properties.hispTotDelta) + 
+      '<br/>Change in Hispanic population in Poverty:  ' + (features.properties.hispPovDelta) + '<br/>' +
+
+      '<br/>Change in total Black population:  ' + (features.properties.blackTotDelta)  + 
+      '<br/>Change in Black population in Poverty:  ' + (features.properties.blackPovDelta) + '<br/> ' + 
+
+      '<br/>Change in total Asian population:  ' + (features.properties.asianTotDelta)  + 
+      '<br/>Change in Asian population in Poverty:  ' + features.properties.asianPovDetlta) + '<br/> ' + 
+
+      '<br/>Change in total Native American population:  ' + (features.properties.nativeTotDelta) + 
+      '<br/>Change in Native American population in Poverty:  ' + (features.properties.nativePovDelta) + '<br/> ' +
+
+      '<br/>Change in total Other population:  ' + (features.properties.otherTotDelta)  + 
+      '<br/>Change in Other population in Poverty:  ' + (features.properties.otherPovDelta);
+    
+    if (clickedStateId) {
+      map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":false})
+    }
+    clickedStateId = features[id];
+    map.setFeatureState({sourceLayer: "County_Boundaries_of_NJ_EDITE-5q8kmm", id: clickedStateId, source:"composite"}, {"click":true})
+    return;
+  }
+ });
+     map.getCanvas().style.cursor = 'default';
+});
+</script>
+</body>
+</html>
